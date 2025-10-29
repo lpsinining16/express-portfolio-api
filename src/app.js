@@ -16,10 +16,27 @@ const app = express();
 app.use(helmet());
 
 // 2. CORS: Enable Cross-Origin Resource Sharing
+
+const allowedOrigins = [
+  "https://lpsinining16.github.io",
+  "https://lpsinining16.github.io/angular-ui-portfolio",
+  "http://localhost:4200"
+];
+
 const corsOptions = {
-  origin: process.env.CLIENT_ORIGIN || "http://localhost:4200",
-  optionsSuccessStatus: 200, // For legacy browser support
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like Postman or curl)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.warn(`🛑 Blocked by CORS: ${origin}`);
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+  optionsSuccessStatus: 200,
 };
+
 app.use(cors(corsOptions));
 
 // 3. Morgan: HTTP request logger
