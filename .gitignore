@@ -13,3 +13,9 @@ yarn-error.log*
 # Logs
 logs
 *.log
+
+# Build output
+dist/
+
+# Vercel output
+.vercel/
